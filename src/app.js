@@ -5,6 +5,10 @@ const cors = require('cors');
 const helmet = require('helmet');
 const { NODE_ENV } = require('./config');
 
+const inventoryRouter = require("./inventory/inventory-router");
+const authRouter = require("./auth/auth-router");
+const userRouter = require("./user/user-router");
+
 const app = express();
 
 const morganOption = (NODE_ENV === 'production')
@@ -12,8 +16,13 @@ const morganOption = (NODE_ENV === 'production')
   : 'common';
 
 app.use(morgan(morganOption));
-app.use(helmet());
 app.use(cors());
+app.use(helmet());
+
+app.use("/api/auth", authRouter);
+app.use("/api/user", userRouter);
+app.use("/api/inventory", inventoryRouter);
+
 
 app.get('/', (req, res) => {
   // eslint-disable-next-line semi
