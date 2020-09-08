@@ -6,17 +6,19 @@ const { requireAuth } = require("../auth/jwt-auth");
 const InventoryRouter = express.Router();
 const jsonBodyParser = express.json();
 
-InventoryRouter.route("/").get((req, res, next) => {
-  InventoryService.getAllInventory(req.app.get("db"))
-    .then((inventory) => {
-      res.json(inventory.map(InventoryService.serializeinventory));
+// get inventory belonging to user with user id
+InventoryRouter
+.route("/").get(requireAuth, (req, res, next) => {
+  InventoryService.getInventory(req.app.get("db"), req.user.user_id)
+    .then((inventoryList) => {
+      res.json(inventoryList.map(inventoryItem => InventoryService.serializeInventory(inventoryItem)));
     })
     .catch(next);
 });
 
 async function checkInventoryExists(req, res, next) {
   try {
-    const inventory = await InventoryService.getInventoryByInevtoryId(
+    const inventory = await InventoryService.getInventoryByInventoryId(
       req.app.get("db"),
       req.params.inventory_id
     );
@@ -36,7 +38,7 @@ async function checkInventoryExists(req, res, next) {
 InventoryRouter
   .route("/:inventory_id")
   .all(requireAuth)
-  .all(checkinventoryExists)
+  .all(checkInventoryExists)
   .get((req, res) => {
     const result = InventoryService.serializeinventory(res.inventory);
     console.log(result);
