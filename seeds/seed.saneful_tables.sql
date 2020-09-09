@@ -15,8 +15,8 @@ INSERT INTO saneful_inventory(user_id, item, description, quantity )
     (2, 'x-box', 'gaming console to stay sane', 1),
     (3, 'flowers', 'beautiful plants to stay sane', 5),
     (4, 'adderall', 'gives you energy, decreases health, decreases sanity', 3),
-    (5, 'bowflex', 'stay healthy and increase energy', 1),
-    (6, 'flowers', 'beautiful plants to stay sane', 5);
+    (5, 'bowflex', 'stay healthy and increase energy', 1);
+    
 
 
 INSERT INTO saneful_saved_game
