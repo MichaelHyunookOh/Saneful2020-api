@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require("path");
-const SavedGameService = require("./saved-game-service");
+const SavedGameService = require("./saved-game-services");
 const { requireAuth } = require("../auth/jwt-auth");
 
 const SavedGameRouter = express.Router();
@@ -14,4 +14,6 @@ SavedGameRouter
       })
       .catch(next);
   });
+
+module.exports = SavedGameRouter;
 
