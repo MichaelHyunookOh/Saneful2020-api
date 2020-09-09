@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS saved_game;
+DROP TABLE IF EXISTS saneful_saved_game;
