@@ -13,8 +13,8 @@ const SavedGameService = {
           'sav.health_points_max',
           'sav.sanity_points',
           'sav.sanity_points_max',
-          'sav.energy_points',
-          'sav.energy_points_max',
+          // 'sav.energy_points',
+          // 'sav.energy_points_max',
           'sav.elapsed_time',
           
           db.raw(
@@ -44,8 +44,8 @@ const SavedGameService = {
         'sav.health_points_max',
         'sav.sanity_points',
         'sav.sanity_points_max',
-        'sav.energy_points',
-        'sav.energy_points_max',
+        // 'sav.energy_points',
+        // 'sav.energy_points_max',
         'sav.elapsed_time',
       
       db.raw(
@@ -75,8 +75,8 @@ const SavedGameService = {
           health_points_max: save.health_points_max,
           sanity_points: save.sanity_points,
           sanity_points_max: save.sanity_points_max,
-          energy_points: save.energy_points,
-          energy_points_max: save.energy_points_max,
+          // energy_points: save.energy_points,
+          // energy_points_max: save.energy_points_max,
           elapsed_time: save.elapsed_time,
           user: {
             user_id: user.user_id,

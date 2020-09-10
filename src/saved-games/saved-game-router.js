@@ -24,8 +24,8 @@ SavedGameRouter
       health_points_max,
       sanity_points,
       sanity_points_max,
-      energy_points,
-      energy_points_max,
+      // energy_points,
+      // energy_points_max,
       elapsed_time,
     } = req.body;
     const newSave = {
@@ -36,8 +36,8 @@ SavedGameRouter
         health_points_max,
         sanity_points,
         sanity_points_max,
-        energy_points,
-        energy_points_max,
+        // energy_points,
+        // energy_points_max,
         elapsed_time,
     };
 
@@ -87,8 +87,8 @@ SavedGameRouter
         health_points_max,
         sanity_points,
         sanity_points_max,
-        energy_points,
-        energy_points_max,
+        // energy_points,
+        // energy_points_max,
         elapsed_time,
       } = req.body;
       const saveToUpdate = {
@@ -99,8 +99,8 @@ SavedGameRouter
           health_points_max,
           sanity_points,
           sanity_points_max,
-          energy_points,
-          energy_points_max,
+          // energy_points,
+          // energy_points_max,
           elapsed_time,
       };
 
