@@ -21,8 +21,11 @@ SavedGameRouter
       current_y_coord,
       money_counter,
       health_points,
+      health_points_max,
       sanity_points,
+      sanity_points_max,
       energy_points,
+      energy_points_max,
       elapsed_time,
     } = req.body;
     const newSave = {
@@ -30,8 +33,11 @@ SavedGameRouter
         current_y_coord,
         money_counter,
         health_points,
+        health_points_max,
         sanity_points,
+        sanity_points_max,
         energy_points,
+        energy_points_max,
         elapsed_time,
     };
 
