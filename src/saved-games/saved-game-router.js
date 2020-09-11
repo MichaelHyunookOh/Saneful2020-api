@@ -24,8 +24,6 @@ SavedGameRouter
       health_points_max,
       sanity_points,
       sanity_points_max,
-      // energy_points,
-      // energy_points_max,
       elapsed_time,
     } = req.body;
     const newSave = {
@@ -36,8 +34,6 @@ SavedGameRouter
         health_points_max,
         sanity_points,
         sanity_points_max,
-        // energy_points,
-        // energy_points_max,
         elapsed_time,
     };
 
@@ -61,6 +57,16 @@ SavedGameRouter
       })
       .catch(next);
   });
+
+  SavedGameRouter
+  .route('/leaderboard')
+  .get((req, res, next) => {
+      SavedGameService.getLeaderboard(req.app.get('db'))
+      .then(scores => {
+          res.json(scores.map(SavedGameService.serializeLeaderboard))
+      })
+      .catch(next)
+  })
 
   SavedGameRouter
   .route('/:save_id')
@@ -87,8 +93,6 @@ SavedGameRouter
         health_points_max,
         sanity_points,
         sanity_points_max,
-        // energy_points,
-        // energy_points_max,
         elapsed_time,
       } = req.body;
       const saveToUpdate = {
@@ -99,8 +103,6 @@ SavedGameRouter
           health_points_max,
           sanity_points,
           sanity_points_max,
-          // energy_points,
-          // energy_points_max,
           elapsed_time,
       };
 
