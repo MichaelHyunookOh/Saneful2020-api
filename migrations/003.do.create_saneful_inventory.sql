@@ -4,5 +4,6 @@ CREATE TABLE saneful_inventory (
     item TEXT NOT NULL,
     description TEXT,
     quantity INTEGER,
-    date_created TIMESTAMPTZ DEFAULT now() NOT NULL
+    date_created TIMESTAMPTZ DEFAULT now() NOT NULL,
+    date_modified TIMESTAMPTZ DEFAULT now() NOT NULL
 );

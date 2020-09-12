@@ -3,5 +3,5 @@ CREATE TABLE saneful_user (
     user_name TEXT NOT NULL UNIQUE,
     user_email TEXT,
     user_password TEXT NOT NULL,
-    date_created TIMESTAMP DEFAULT now() NOT NULL
+    date_created TIMESTAMPTZ DEFAULT now() NOT NULL
 );

@@ -6,12 +6,15 @@ CREATE TABLE saneful_saved_game (
     money_counter INTEGER NOT NULL,
     health_points INTEGER NOT NULL,
     sanity_points INTEGER NOT NULL,
+    health_points_max INTEGER NOT NULL,
+    sanity_points_max INTEGER NOT NULL,
+    character_skin INTEGER NOT NULL,
     dead BOOLEAN NOT NULL,
     -- energy_points INTEGER NOT NULL,
     elapsed_time INTEGER NOT NULL,
-    
-    user_id INTEGER REFERENCES saneful_user(user_id) ON DELETE CASCADE NOT NULL
-    
+    date_created TIMESTAMPTZ DEFAULT now() NOT NULL,
+    date_modified TIMESTAMPTZ DEFAULT now() NOT NULL,
+    user_id INTEGER REFERENCES saneful_user(user_id) ON DELETE CASCADE NOT NULL    
 );
 
 
