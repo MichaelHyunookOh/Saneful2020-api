@@ -31,8 +31,8 @@ Dash:
 Login:
 ![Saneful Screenshot: Login]()
 
-Learn:
-![Saneful Screenshot: Learn]()
+Game Window:
+![Saneful Screenshot: Game Window]()
 
 Registration:
 ![Saneful Screenshot: Registration]()
