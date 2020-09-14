@@ -27,14 +27,14 @@ SavedGameRouter
       elapsed_time,
     } = req.body;
     const newSave = {
-        current_x_coord,
-        current_y_coord,
-        money_counter,
-        health_points,
-        health_points_max,
-        sanity_points,
-        sanity_points_max,
-        elapsed_time,
+      current_x_coord,
+      current_y_coord,
+      money_counter,
+      health_points,
+      health_points_max,
+      sanity_points,
+      sanity_points_max,
+      elapsed_time,
     };
 
     for (const [key, value] of Object.entries(newSave)) {
@@ -45,11 +45,9 @@ SavedGameRouter
       }
     }
     newSave.user_id = req.user.user_id;
-    
 
     SavedGameService.insertSave(req.app.get('db'), newSave)
       .then((save) => {
-          
         res
           .status(201)
           .location(`/api/save/${save.id}`)
@@ -58,53 +56,53 @@ SavedGameRouter
       .catch(next);
   });
 
-  SavedGameRouter
+SavedGameRouter
   .route('/leaderboard')
   .get((req, res, next) => {
-      SavedGameService.getLeaderboard(req.app.get('db'))
+    SavedGameService.getLeaderboard(req.app.get('db'))
       .then(scores => {
-          res.json(scores.map(SavedGameService.serializeLeaderboard))
+        res.json(scores.map(SavedGameService.serializeLeaderboard));
       })
-      .catch(next)
-  })
+      .catch(next);
+  });
 
-  SavedGameRouter
+SavedGameRouter
   .route('/:save_id')
   .all(requireAuth)
   .all((req, res, next) => {
     SavedGameService.getById(req.app.get('db'), req.params.save_id)
-    .then((save) => {
-      if (!save) {
-        return res.status(404).json({
-          error: { message: `Save doesn't exist` },
-        });
-      }
-      res.save = save;
-      next();
-    })
-    .catch(next);
+      .then((save) => {
+        if (!save) {
+          return res.status(404).json({
+            error: { message: `Save doesn't exist` },
+          });
+        }
+        res.save = save;
+        next();
+      })
+      .catch(next);
   })
   .patch(jsonParser, (req, res, next) => {
     const {
-        current_x_coord,
-        current_y_coord,
-        money_counter,
-        health_points,
-        health_points_max,
-        sanity_points,
-        sanity_points_max,
-        elapsed_time,
-      } = req.body;
-      const saveToUpdate = {
-          current_x_coord,
-          current_y_coord,
-          money_counter,
-          health_points,
-          health_points_max,
-          sanity_points,
-          sanity_points_max,
-          elapsed_time,
-      };
+      current_x_coord,
+      current_y_coord,
+      money_counter,
+      health_points,
+      health_points_max,
+      sanity_points,
+      sanity_points_max,
+      elapsed_time,
+    } = req.body;
+    const saveToUpdate = {
+      current_x_coord,
+      current_y_coord,
+      money_counter,
+      health_points,
+      health_points_max,
+      sanity_points,
+      sanity_points_max,
+      elapsed_time,
+    };
 
     const numberOfValues = Object.values(saveToUpdate).filter(Boolean)
       .length;
@@ -126,7 +124,7 @@ SavedGameRouter
       })
       .catch(next);
   });
-  
+
 
 module.exports = SavedGameRouter;
 
