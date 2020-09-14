@@ -11,14 +11,14 @@ INSERT INTO saneful_user
 
 
 INSERT INTO saneful_saved_game
-  (current_x_coord, current_y_coord, money_counter, health_points, sanity_points, dead, elapsed_time, health_points_max, sanity_points_max, user_id)
+  (current_x_coord, current_y_coord, money_counter, health_points, sanity_points, dead, character_skin, elapsed_time, health_points_max, sanity_points_max, user_id)
   VALUES
-    (5, 5, 20, 10, 8, true, 1, 100, 100, 1),
-    (4, 4, 20, 10, 8, false, 2, 100, 100, 2),
-    (3, 3, 20, 10, 8, false, 3, 100, 100, 3),
-    (2, 2, 20, 10, 8, true, 4, 100, 100, 4),
-    (2, 2, 20, 10, 8, true, 10, 100, 100, 4),
-    (6, 6, 20, 10, 8, true, 5, 100, 100, 5);
+    (5, 5, 20, 10, 8, true, 1, 1, 100, 100, 1),
+    (4, 4, 20, 10, 8, false, 2, 2, 100, 100, 2),
+    (3, 3, 20, 10, 8, false, 3, 3, 100, 100, 3),
+    (2, 2, 20, 10, 8, true, 1, 4, 100, 100, 4),
+    (2, 2, 20, 10, 8, true, 2, 10, 100, 100, 4),
+    (6, 6, 20, 10, 8, true, 3, 5, 100, 100, 5);
 
 
 INSERT INTO saneful_inventory(saved_game_id, item, description, quantity )
