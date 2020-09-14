@@ -97,6 +97,8 @@ SavedGameRouter
         health_points_max,
         sanity_points,
         sanity_points_max,
+        dead,
+        character_skin,
         elapsed_time,
       } = req.body;
       const saveToUpdate = {
@@ -107,6 +109,8 @@ SavedGameRouter
           health_points_max,
           sanity_points,
           sanity_points_max,
+          dead,
+          character_skin,
           elapsed_time,
       };
 
