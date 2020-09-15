@@ -31,14 +31,14 @@ authRouter
             });
 
           const sub = dbUser.user_email;
-          const payload = { user_id: dbUser.user_id };
+          const payload = { user_id: dbUser.user_id, user_name: dbUser.user_name };
           res.send({
             authToken: AuthService.createJwt(sub, payload),
             user_id: payload.user_id,
+            user_name: payload.user_name,
           });
-        });
-      })
-      .catch(next);
-  });
+        })
+          .catch(next);
+      });
 
-module.exports = authRouter;
+    module.exports = authRouter;

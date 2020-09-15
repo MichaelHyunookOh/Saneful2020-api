@@ -88,6 +88,7 @@ SavedGameRouter
   })
   .patch(jsonParser, (req, res, next) => {
     const {
+<<<<<<< HEAD
       current_x_coord,
       current_y_coord,
       money_counter,
@@ -107,6 +108,31 @@ SavedGameRouter
       sanity_points_max,
       elapsed_time,
     };
+=======
+        current_x_coord,
+        current_y_coord,
+        money_counter,
+        health_points,
+        health_points_max,
+        sanity_points,
+        sanity_points_max,
+        dead,
+        character_skin,
+        elapsed_time,
+      } = req.body;
+      const saveToUpdate = {
+          current_x_coord,
+          current_y_coord,
+          money_counter,
+          health_points,
+          health_points_max,
+          sanity_points,
+          sanity_points_max,
+          dead,
+          character_skin,
+          elapsed_time,
+      };
+>>>>>>> 3b358107338a3039b31caa56c78f45d8ae0c0413
 
     const numberOfValues = Object.values(saveToUpdate).filter(Boolean)
       .length;
