@@ -19,17 +19,14 @@ const InventoryService = {
       db.raw(
         `json_strip_nulls(
           json_build_object(
-            'user_id', usr.user_id,
-            'user_name', usr.user_name,
-            'user_email', usr.user_email,
-            'date_created', usr.date_created
+            'saved_game_id', sav.saved_game_id
           )
-        ) AS "user"`
+        ) AS "save"`
       )
     )
-    .leftJoin('saneful_user AS usr', 'inv.user_id', 'usr.user_id')
-    .where('usr.user_id', id)
-    .groupBy('inv.inventory_id', 'usr.user_id');
+    .leftJoin('saneful_saved_game AS sav', 'inv.saved_game_id', 'sav.saved_game_id')
+    .where('sav.saved_game_id', id)
+    .groupBy('inv.inventory_id', 'sav.saved_game_id');
   },
 
   getInventoryByInventoryId(db, Inventory_id) {
@@ -53,7 +50,7 @@ const InventoryService = {
   },
 
   serializeInventory(inventory) {
-    const { user } = inventory;
+    const { save } = inventory;
     return {
       inventory_id: inventory.inventory_id,
       user: {

@@ -97,11 +97,11 @@ const SavedGameService = {
 
     getLeaderboard(db) {
         return db
-        .from ('saneful_saved_game')
-        .select(db.raw('user_name, MAX(elapsed_time), dead'))
+        .from('saneful_saved_game')
+        .select('user_name', 'elapsed_time', 'dead')
+        .innerJoin(db.raw('(select user_id, MAX(elapsed_time) as MaxTime from saneful_saved_game group by user_id) as groupedssg on saneful_saved_game.user_id = groupedssg.user_id and saneful_saved_game.elapsed_time = groupedssg.MaxTime'))
         .leftJoin('saneful_user', 'saneful_saved_game.user_id', 'saneful_user.user_id')
-        .groupBy('user_name', 'dead')
-        .orderBy('max', 'desc')
+        .orderBy('elapsed_time', 'desc')
     
     },
 
@@ -143,7 +143,7 @@ const SavedGameService = {
           dead: score.dead,
           elapsed_time: score.elapsed_time,
           user_name: score.user_name,
-          elapsed_time: score.max
+      
         };
     },
 
