@@ -36,20 +36,31 @@ async function checkInventoryExists(req, res, next) {
 }
 
 InventoryRouter
-  .route("/:inventory_id")
-  .all(requireAuth)
-  .all(checkInventoryExists)
+.route('/:save_id')
+.all(requireAuth)
+.all((req, res, next) => {
+  InventoryService.getSaveById(req.app.get('db'), req.params.save_id)
+  .then((save) => {
+    if (!save) {
+      return res.status(404).json({
+        error: { message: `Save doesn't exist` },
+      });
+    }
+    res.save = save;
+    next();
+  })
+  .catch(next);
+})
   .get((req, res) => {
     const result = InventoryService.serializeinventory(res.inventory);
     console.log(result);
     res.json(result);
-  });
-
-InventoryRouter.route("/")
+  })
 .post(requireAuth, jsonBodyParser, (req, res, next) => {
-  const user_id = req.user.user_id;
   const { item, description, quantity } = req.body;
-  const newinventory = { user_id, item, description, quantity };
+  const newinventory = { item, description, quantity };
+  console.log(req.params.save_id)
+  
 
   for (const [key, value] of Object.entries(newinventory))
     if (value == null)
@@ -57,7 +68,9 @@ InventoryRouter.route("/")
         error: `Something is wrong with post Inventory Router`,
       });
 
-  return InventoryService.insertInventory(req.app.get("db"), newinventory)
+    newinventory.saved_game_id = req.params.save_id
+
+  InventoryService.insertInventory(req.app.get("db"), newinventory)
     .then((inventory) => {
       // Debug here
       console.log("inventory:", inventory.inventory_id);
