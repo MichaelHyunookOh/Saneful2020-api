@@ -1,9 +1,27 @@
 const xss = require("xss");
+const SavedGameService = require('../saved-games/saved-game-services')
 
 const InventoryService = {
 
   getAllInventory(db) {
-    return db("saneful_inventory").select("*");
+    return db
+    .from('saneful_inventory AS inv')
+    .select(
+      'inv.inventory_id',
+      'inv.item',
+      'inv.description',
+      'inv.quantity',
+      
+      db.raw(
+        `json_strip_nulls(
+          json_build_object(
+            'saved_game_id', sav.saved_game_id
+          )
+        ) AS "save"`
+      )
+    )
+    .leftJoin('saneful_saved_game AS sav', 'inv.saved_game_id', 'sav.saved_game_id')
+    .groupBy('inv.inventory_id', 'sav.saved_game_id');
   },
 
  // user id
@@ -29,10 +47,9 @@ const InventoryService = {
     .groupBy('inv.inventory_id', 'sav.saved_game_id');
   },
 
-  getInventoryByInventoryId(db, Inventory_id) {
-    console.log(Inventory_id);
-    return db("saneful_inventory")
-    .where({ Inventory_id })
+  getInventoryById(db, inventory_id) {
+    return InventoryService.getAllInventory(db)
+    .where('inv.inventory_id', inventory_id)
     .first();
   },
 
@@ -40,6 +57,9 @@ const InventoryService = {
       return db
       .insert(newInventory)
       .into("saneful_inventory")
+      .returning('*')
+      .then(([row]) => row)
+      .then((row) => InventoryService.getInventoryById(db, row.inventory_id));
   },
 
   getInventoryByUserId(db, userId) {
@@ -49,15 +69,18 @@ const InventoryService = {
     .where('user_id', userId)
   },
 
+  getSaveById(db, saved_game_id) {
+    return SavedGameService.getAllSavedGames(db)
+      .where('sav.saved_game_id', saved_game_id)
+      .first();
+  },
+
   serializeInventory(inventory) {
     const { save } = inventory;
     return {
       inventory_id: inventory.inventory_id,
-      user: {
-        user_id: user.user_id,
-        user_name: user.user_name,
-        user_email: user.user_email,
-        date_created: user.date_created
+      save: {
+        saved_game_id: save.saved_game_id
       },
       item: inventory.description,
       quantity: inventory.quantity,
