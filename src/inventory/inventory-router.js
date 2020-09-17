@@ -36,6 +36,25 @@ async function checkInventoryExists(req, res, next) {
 }
 
 InventoryRouter
+.route('/:inventory_id')
+.all((req, res, next) => {
+  InventoryService.getInventoryById(req.app.get('db'), req.params.inventory_id)
+  .then((inventory) => {
+    if (!inventory) {
+      return res.status(404).json({
+        error: { message: `Save doesn't exist` },
+      });
+    }
+    res.inventory = inventory;
+    next();
+  })
+  .catch(next);
+}) 
+.get(requireAuth, (req, res) => {
+  res.json(InventoryService.serializeInventory(res.inventory))
+})
+
+InventoryRouter
 .route('/:save_id')
 .all(requireAuth)
 .all((req, res, next) => {
@@ -51,11 +70,6 @@ InventoryRouter
   })
   .catch(next);
 })
-  .get((req, res) => {
-    const result = InventoryService.serializeinventory(res.inventory);
-    console.log(result);
-    res.json(result);
-  })
 .post(requireAuth, jsonBodyParser, (req, res, next) => {
   const { item, description, quantity } = req.body;
   const newinventory = { item, description, quantity };
@@ -82,5 +96,7 @@ InventoryRouter
     })
     .catch(next);
 });
+
+
 
 module.exports = InventoryRouter;
