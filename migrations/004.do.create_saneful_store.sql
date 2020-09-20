@@ -3,6 +3,7 @@ CREATE TABLE saneful_store (
   item_name TEXT NOT NULL,
   item_description TEXT,
   item_price INTEGER NOT NULL,
+  is_unlimited BOOLEAN NOT NULL,
   item_available_qty INTEGER NOT NULL,
   can_use_anywhere BOOLEAN NOT NULL,
   use_at TEXT[]
