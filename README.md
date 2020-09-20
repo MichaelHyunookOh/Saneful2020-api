@@ -20,25 +20,27 @@ Users can login and play Saneful.
 
 Users lose game when they run out of sanity.
 
-_______________________________________________________________________________
-_______________________________________________________________________________
+---
+
+---
 
 ## Screenshots
 
 Dash:
-![Saneful Screenshot: Dash]()
+![Saneful Screenshot: Dash](https://github.com/MattDizzle/favicon-host/blob/master/saneful/dashboard.JPG?raw=true)
 
-Login:
-![Saneful Screenshot: Login]()
+Landing:
+![Saneful Screenshot: Landing](https://github.com/MattDizzle/favicon-host/blob/master/saneful/landing-screen.JPG?raw=true)
 
 Game Window:
-![Saneful Screenshot: Game Window]()
+![Saneful Screenshot: Game Window](https://github.com/MattDizzle/favicon-host/blob/master/saneful/gameview.JPG?raw=true)
 
-Registration:
-![Saneful Screenshot: Registration]()
+Leaderboard:
+![Saneful Screenshot: Leaderboard](https://github.com/MattDizzle/favicon-host/blob/master/saneful/leaderboard.JPG?raw=true)
 
-________________________________________________________________________________
-________________________________________________________________________________
+---
+
+---
 
 ## API Documentation
 
@@ -46,10 +48,10 @@ POST
 https://mighty-reaches-06724.herokuapp.com/api/user
 
 Required body format:
-{   
-    "user_name": "MattDizzle",
-    "user_email": "mattdizzledev102@gmail.com",
-    "user_password": "Test123!"
+{  
+ "user_name": "MattDizzle",
+"user_email": "mattdizzledev102@gmail.com",
+"user_password": "Test123!"
 }
 
 POST  
@@ -57,8 +59,8 @@ https://mighty-reaches-06724.herokuapp.com/api/auth
 
 Required body format:
 {
-    "user_email": "mattdizzledev101@gmail.com",
-    "user_password": "Test123!"
+"user_email": "mattdizzledev101@gmail.com",
+"user_password": "Test123!"
 }
 
 This endpoint returns an authToken and the user_id in json format.
@@ -69,21 +71,23 @@ https://mighty-reaches-06724.herokuapp.com/api/save
 Bearer Token required. The Bearer token is the authToken returned on login.
 
 Required body format:
-{   
-    "saved_game_id": "6",
-    "current_x_coord": "1",
-    "current_y_coord": "2",
-    "money_counter": "33",
-    "health_points": "44",
-    "sanity_points": "32",
-    "energy_points": "99",
-    "health_points_max":"99"
-    "elapsed_time": "3",
-    "user_id": "6"
+{  
+ "saved_game_id": "6",
+"current_x_coord": "1",
+"current_y_coord": "2",
+"money_counter": "99",
+"health_points": "44",
+"sanity_points": "32",
+"energy_points": "99",
+"health_points_max":"99",
+"sanity_points_max": "99",
+"elapsed_time": "3",
+"dead": "false",
+"character_skin": "1",
+"user_id": "1"
 }
 
 This endpoint saves the game in the database.
-
 
 ## About the Technology Stack
 
@@ -157,7 +161,6 @@ Run the tests mode `npm test`
 Run the migrations up `npm run migrate`
 
 Run the migrations down `npm run migrate -- 0`
-
 
 # Express Boilerplate!
 
