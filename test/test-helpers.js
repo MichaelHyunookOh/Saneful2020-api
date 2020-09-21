@@ -106,6 +106,30 @@ function makeSavesFixtures() {
   return { testUsers, testSaves }
 }
 
+function cleanTables(db) {
+  return db.transaction(trx =>
+    trx.raw(
+      `TRUNCATE
+        saneful_users,
+        saneful_saved_games,
+        saneful_inventory,
+        saneful_store
+      `
+    )
+    .then(() =>
+      // these alter sequences probably won't work
+      Promise.all([
+        trx.raw(`ALTER SEQUENCE blogful_articles_id_seq minvalue 0 START WITH 1`),
+        trx.raw(`ALTER SEQUENCE blogful_users_id_seq minvalue 0 START WITH 1`),
+        trx.raw(`ALTER SEQUENCE blogful_comments_id_seq minvalue 0 START WITH 1`),
+        trx.raw(`SELECT setval('blogful_articles_id_seq', 0)`),
+        trx.raw(`SELECT setval('blogful_users_id_seq', 0)`),
+        trx.raw(`SELECT setval('blogful_comments_id_seq', 0)`),
+      ])
+    )
+  )
+}
+
 function seedUsers(db, users) {
   const preppedUsers = users.map(user => ({
     ...user,
