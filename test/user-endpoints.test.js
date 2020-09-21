@@ -23,7 +23,7 @@ describe('User Endpoints', function() {
 
   afterEach('clean the table', () => db.raw('TRUNCATE saneful_saved_game, saneful_user RESTART IDENTITY CASCADE'))
 
-  describe.only(`POST /api/user`, () => {
+  describe(`POST /api/user`, () => {
     context(`User Validation`, () => {
       beforeEach('insert users', () =>
         helpers.seedUsers(
