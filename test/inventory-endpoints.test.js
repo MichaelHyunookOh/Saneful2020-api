@@ -4,7 +4,7 @@ const app = require('../src/app');
 const helpers = require('./test-helpers');
 const supertest = require('supertest');
 
-describe('Save endpoints', function () {
+describe('Inventory endpoints', function () {
   let db;
 
   const { testUsers, testSaves } = helpers.makeSavesFixtures();
@@ -27,7 +27,7 @@ describe('Save endpoints', function () {
     db.raw('TRUNCATE saneful_saved_game, saneful_user RESTART IDENTITY CASCADE')
   );
 
-  describe.only(`GET /api/save`, () => {
+  describe(`GET /api/save`, () => {
     context(`Given no saves`, () => {
       beforeEach(() => helpers.seedUsers(db, testUsers));
       console.log(testUsers[0])
@@ -56,15 +56,15 @@ describe('Save endpoints', function () {
     });
   });
 
-  describe(`GET /api/subscriptions/:subscription_id`, () => {
-    context(`Given no subscriptions`, () => {
+  describe(`GET /api/inventory/:inventory_id`, () => {
+    context(`Given no inventory`, () => {
       beforeEach(() => helpers.seedUsers(db, testUsers));
       it(`responds with 404`, () => {
-        const subscriptionId = 123456;
+        const inventoryId = 123456;
         return supertest(app)
-          .get(`/api/subscriptions/${subscriptionId}`)
+          .get(`/api/inventory/${inventoryId}`)
           .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-          .expect(404, { error: { message: `Subscription doesn't exist` } });
+          .expect(404);
       });
     });
     context('Given there are subscriptions in the database', () => {
@@ -73,7 +73,7 @@ describe('Save endpoints', function () {
       });
 
       it('responds with 200 and the specified article', () => {
-        const subscriptionId = 2;
+        const saveId = 2;
         const expectedSubscription = helpers.makeExpectedSubscription(
           testUsers,
           testSubscriptions[subscriptionId - 1]
@@ -87,25 +87,30 @@ describe('Save endpoints', function () {
     });
   });
 
-  describe(`POST /api/subscriptions`, () => {
+  describe(`POST /api/save`, () => {
     beforeEach('insert subscriptions', () =>
-      helpers.seedSubscriptionsTables(db, testUsers)
+      helpers.seedSavesTables(db, testUsers)
     );
-    it(`creates a subscription, responding with 201 and the new subscription`, () => {
+    it(`creates a save, responding with 201 and the new save`, () => {
       const testUser = testUsers[0];
-      const newSubscription = {
-        subscription_name: 'Android',
-        subscription_price: '12.99',
-        category: 'Automatic',
-        subscription_user_name: 'appletree',
-        subscription_password: 'Apples123!',
-        user_id: testUser.id,
+      const newSave = {
+        current_x_coord: 5,
+        current_y_coord: 5,
+        money_counter: 70,
+        health_points: 70,
+        health_points_max: 100,
+        sanity_points: 75,
+        sanity_points_max: 100,
+        character_skin: 1,
+        dead: true,
+        elapsed_time: 20,
+        user_id: testUser.user_id
       };
 
       return supertest(app)
-        .post('/api/subscriptions')
+        .post('/api/save')
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-        .send(newSubscription)
+        .send(newSave)
         .expect(201);
     });
 
@@ -115,26 +120,26 @@ describe('Save endpoints', function () {
       'category',
     ];
 
-    requiredFields.forEach((field) => {
-      const testUser = testUsers[0];
-      const newSubscription = {
-        subscription_name: 'Android',
-        subscription_price: '12.99',
-        category: 'Automatic',
-      };
+    // requiredFields.forEach((field) => {
+    //   const testUser = testUsers[0];
+    //   const newSubscription = {
+    //     subscription_name: 'Android',
+    //     subscription_price: '12.99',
+    //     category: 'Automatic',
+    //   };
 
-      it(`responds with 400 and an error message when the '${field}' is missing`, () => {
-        delete newSubscription[field];
+    //   it(`responds with 400 and an error message when the '${field}' is missing`, () => {
+    //     delete newSubscription[field];
 
-        return supertest(app)
-          .post('/api/subscriptions')
-          .set('Authorization', helpers.makeAuthHeader(testUser))
-          .send(newSubscription)
-          .expect(400, {
-            error: { message: `Missing '${field}' in request body` },
-          });
-      });
-    });
+    //     return supertest(app)
+    //       .post('/api/subscriptions')
+    //       .set('Authorization', helpers.makeAuthHeader(testUser))
+    //       .send(newSubscription)
+    //       .expect(400, {
+    //         error: { message: `Missing '${field}' in request body` },
+    //       });
+    //   });
+    // });
   });
 
   describe(`DELETE /api/subscriptions/:subscription_id`, () => {
@@ -171,72 +176,77 @@ describe('Save endpoints', function () {
     });
   });
 
-  describe(`PATCH /api/subscriptions/:subscription_id`, () => {
-    context(`Given no subscriptions`, () => {
+  describe(`PATCH /api/save/:save_id`, () => {
+    context(`Given no saves`, () => {
       beforeEach(() => helpers.seedUsers(db, testUsers));
       it(`responds with 404`, () => {
-        const subscriptionId = 123456;
+        const saveId = 123456;
         return supertest(app)
-          .patch(`/api/subscriptions/${subscriptionId}`)
+          .patch(`/api/save/${saveId}`)
           .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-          .expect(404, { error: { message: `Subscription doesn't exist` } });
+          .expect(404);
       });
     });
 
-    context('Given there are subscriptions in the database', () => {
-      beforeEach('insert subscriptions', () => {
+    context('Given there are saves in the database', () => {
+      beforeEach('insert saves', () => {
         return db
-          .into('subroom_users')
+          .into('saneful_user')
           .insert(testUsers)
           .then(() => {
-            return db.into('subscription').insert(testSubscriptions);
+            return db.into('saneful_saved_game').insert(testSaves);
           });
       });
 
       it('responds with 204 and updates the subscription', () => {
         const idToUpdate = 2;
-        const updateSubscription = {
-          subscription_name: 'Youtube',
-          subscription_price: '10.99',
-          subscription_user_name: 'chicken',
-          subscription_password: 'donteatme',
-          category: 'Manual',
+        const updateSave = {
+        current_x_coord: 5,
+        current_y_coord: 5,
+        money_counter: 70,
+        health_points: 80,
+        health_points_max: 100,
+        sanity_points: 75,
+        sanity_points_max: 100,
+        character_skin: 1,
+        dead: true,
+        elapsed_time: 20,
         };
         const expectedSubscription = {
-          ...testSubscriptions[idToUpdate - 1],
-          ...updateSubscription,
+          ...testSaves[idToUpdate - 1],
+          ...updateSave,
         };
         return supertest(app)
-          .patch(`/api/subscriptions/${idToUpdate}`)
+          .patch(`/api/save/${idToUpdate}`)
           .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-          .send(updateSubscription)
+          .send(updateSave)
           .expect(204);
       });
 
-      it(`responds with 400 when no required fields supplied`, () => {
-        const idToUpdate = 2;
-        return supertest(app)
-          .patch(`/api/subscriptions/${idToUpdate}`)
-          .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-          .send({ irrelevantField: 'foo' })
-          .expect(400);
-      });
+      // it(`responds with 400 when no required fields supplied`, () => {
+      //   const idToUpdate = 2;
+      //   return supertest(app)
+      //     .patch(`/api/subscriptions/${idToUpdate}`)
+      //     .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+      //     .send({ irrelevantField: 'foo' })
+      //     .expect(400);
+      // });
 
-      it(`responds with 204 when updating only a subset of fields`, () => {
-        const idToUpdate = 2;
-        const updateSubscription = {
-          subscription_name: 'updated name',
-        };
+      // it(`responds with 204 when updating only a subset of fields`, () => {
+      //   const idToUpdate = 2;
+      //   const updateSubscription = {
+      //     subscription_name: 'updated name',
+      //   };
 
-        return supertest(app)
-          .patch(`/api/subscriptions/${idToUpdate}`)
-          .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-          .send({
-            ...updateSubscription,
-            fieldToIgnore: 'should not be in GET response',
-          })
-          .expect(204);
-      });
+      //   return supertest(app)
+      //     .patch(`/api/subscriptions/${idToUpdate}`)
+      //     .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+      //     .send({
+      //       ...updateSubscription,
+      //       fieldToIgnore: 'should not be in GET response',
+      //     })
+      //     .expect(204);
+      // });
     });
   });
 });
