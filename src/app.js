@@ -18,7 +18,6 @@ const morganOption = (NODE_ENV === 'production')
 app.use(morgan(morganOption));
 app.use(cors());
 app.use(helmet());
-// app.use((req, res, next) => { console.log('**************', req); next(); });
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/save", savedGameRouter);

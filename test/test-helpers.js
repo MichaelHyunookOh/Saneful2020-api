@@ -5,10 +5,10 @@ function makeUsersArray() {
   return [
     {
       user_id: 1,
-      user_name: "miloh",
-      user_email: "hi@gmail.com",
-      user_password: "Hello123!",
-      date_created: "2029-01-22T16:28:32.615Z",
+      user_name: 'miloh',
+      user_email: 'hi@gmail.com',
+      user_password: 'Hello123!',
+      date_created: '2029-01-22T16:28:32.615Z',
     },
     {
       user_id: 2,
