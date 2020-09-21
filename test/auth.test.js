@@ -68,7 +68,7 @@ describe.only('Auth Endpoints', () => {
         user_email: testUser.user_email,
         user_password: testUser.user_password
       };
-      console.log(userValidCreds)
+      console.log(userValidCreds);
       const expectedToken = jwt.sign(
         { user_id: testUser.user_id, user_name: testUser.user_name },
         config.JWT_SECRET,
@@ -77,7 +77,7 @@ describe.only('Auth Endpoints', () => {
           algorithm: 'HS256'
         }
       );
-      console.log(expectedToken)
+      console.log(expectedToken);
       const expectedId = testUser.user_id;
       const expectedUser = testUser.user_name;
       return supertest(app).post('/api/auth').send(userValidCreds).expect(200, {

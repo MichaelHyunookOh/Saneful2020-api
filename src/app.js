@@ -18,7 +18,7 @@ const morganOption = (NODE_ENV === 'production')
 app.use(morgan(morganOption));
 app.use(cors());
 app.use(helmet());
-// app.use((req, res, next)=>{console.log(req.url); next()})
+// app.use((req, res, next) => { console.log('**************', req); next(); });
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/save", savedGameRouter);
@@ -26,7 +26,7 @@ app.use("/api/save", savedGameRouter);
 
 app.get('/', (req, res) => {
   // eslint-disable-next-line semi
-  res.send('Hello, world!')
+  res.send('Hello, world!');
 });
 
 app.use(function errorHandler(error, req, res, next) {
