@@ -40,5 +40,6 @@ authRouter
         })
           .catch(next);
       });
+  });
 
-    module.exports = authRouter;
+module.exports = authRouter;
