@@ -4,6 +4,7 @@ const app = require('../src/app');
 const helpers = require('./test-helpers');
 const supertest = require('supertest');
 const jwt = require('jsonwebtoken');
+const config = require('../src/config');
 
 describe.only('Auth Endpoints', () => {
   let db;
@@ -75,24 +76,28 @@ describe.only('Auth Endpoints', () => {
       const userValidCreds = {
         user_email: testUser.user_email,
         user_password: testUser.user_password,
-      }
+      };
       const expectedToken = jwt.sign(
         { user_id: testUser.user_id, user_name: testUser.user_name },
-        process.env.JWT_SECRET,
+        config.JWT_SECRET,
         {
           subject: testUser.user_email,
           algorithm: 'HS256',
         }
-      )
-      console.log(expectedToken)
+      );
+      console.log('----------',expectedToken)
+      console.log(userValidCreds)
       return supertest(app)
-        .post('/api/auth')
-        .send(userValidCreds)
-        .expect(200, {
-          authToken: expectedToken,
-          user_id: testUser.user_id,
-          user_name: testUser.user_name
-        })
+      .post('/api/auth')
+      .set('Content-Type', 'application/json')
+      .send(userValidCreds)
+      .expect(200)
+      .then(res => {
+        expect(res.body.authToken).to.equal(expectedToken);
+        expect(res.body.user.user_id).to.equal(user.user_id);
+        expect(res.body.user.user_email).to.equal(user.user_email);
+        expect(res.body.user.user_password).to.be.undefined;
+      })
     })
   })
 })
