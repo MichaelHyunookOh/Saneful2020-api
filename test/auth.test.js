@@ -7,12 +7,9 @@ const jwt = require('jsonwebtoken');
 const config = require('../src/config');
 describe.only('Auth Endpoints', () => {
   let db;
-<<<<<<< HEAD
-
-=======
->>>>>>> f07ef372bb475f34a776d8c10447cb8d56388a7e
   const { testUsers } = helpers.makeSavesFixtures();
   const testUser = testUsers[0];
+
   before('make knex instance', () => {
     db = knex({
       client: 'pg',
@@ -20,36 +17,21 @@ describe.only('Auth Endpoints', () => {
     });
     app.set('db', db);
   });
+
   after('disconnect from db', () => db.destroy());
-  before('clean the table', () =>
-    db.raw('TRUNCATE saneful_saved_game, saneful_user RESTART IDENTITY CASCADE')
-  );
-  afterEach('clean the table', () =>
-    db.raw('TRUNCATE saneful_saved_game, saneful_user RESTART IDENTITY CASCADE')
-  );
+  before('clean the table', () => helpers.cleanTables(db));
+  afterEach('clean the table', () => helpers.cleanTables(db));
+
   describe('POST /api/auth', () => {
     beforeEach('insert users', () => {
-<<<<<<< HEAD
-      helpers.seedUsers(
-        db,
-        testUsers
-      );
-    });
-
-=======
       helpers.seedUsers(db, testUsers);
     });
->>>>>>> f07ef372bb475f34a776d8c10447cb8d56388a7e
     const requiredFields = ['user_email', 'user_password'];
     requiredFields.forEach((field) => {
       const loginAttemptBody = {
         user_email: testUser.user_email,
-        user_password: testUser.user_password
+        user_password: testUser.user_password,
       };
-<<<<<<< HEAD
-
-=======
->>>>>>> f07ef372bb475f34a776d8c10447cb8d56388a7e
       it(`responds with 400 required error when '${field}' is missing`, () => {
         delete loginAttemptBody[field];
         return supertest(app)
@@ -58,7 +40,7 @@ describe.only('Auth Endpoints', () => {
           .expect(400);
       });
     });
-    it(`responds 400 'invalid email or password' when bad user_name`, () => {
+    it(`responds 401 'invalid email or password' when bad user_name`, () => {
       const userInvalidUser = {
         user_email: 'user-not',
         user_password: 'existy'
@@ -66,9 +48,9 @@ describe.only('Auth Endpoints', () => {
       return supertest(app)
         .post('/api/auth')
         .send(userInvalidUser)
-        .expect(400, { error: `Incorrect email or password` });
+        .expect(401, { error: `Incorrect email or password` });
     });
-    it(`responds 400 'invalid email or password' when bad password`, () => {
+    it(`responds 401 'invalid email or password' when bad password`, () => {
       const userInvalidPass = {
         user_email: testUser.user_email,
         user_password: 'incorrect'
@@ -76,28 +58,18 @@ describe.only('Auth Endpoints', () => {
       return supertest(app)
         .post('/api/auth')
         .send(userInvalidPass)
-        .expect(400, { error: `Incorrect email or password` });
+        .expect(401, { error: `Incorrect email or password` });
     });
     it(`responds 200 and JWT auth token using secret when valid credentials`, () => {
       const userValidCreds = {
         user_email: testUser.user_email,
         user_password: testUser.user_password
       };
-      const expectedToken = jwt.sign(
-        { user_id: testUser.user_id, user_name: testUser.user_name },
-        config.JWT_SECRET,
-        {
-          subject: testUser.user_email,
-          algorithm: 'HS256'
-        }
-      );
-      const expectedId = testUser.user_id;
-      const expectedUser = testUser.user_name;
-      return supertest(app).post('/api/auth').send(userValidCreds).expect(200, {
-        authToken: expectedToken,
-        user_id: expectedId,
-        user_name: expectedUser
-      });
+      return supertest(app)
+        .post('/api/auth')
+        .set('Content-Type', 'application/json')
+        .send(userValidCreds)
+        .expect(200);
     });
   });
 });

@@ -30,7 +30,7 @@ describe('Save endpoints', function () {
   describe(`GET /api/save`, () => {
     context(`Given no saves`, () => {
       beforeEach(() => helpers.seedUsers(db, testUsers));
-      console.log(testUsers[0])
+      console.log(testUsers[0]);
       it(`responds with 200 and an empty list`, () => {
         return supertest(app)
           .get('/api/save')
@@ -201,16 +201,16 @@ describe('Save endpoints', function () {
       it('responds with 204 and updates the subscription', () => {
         const idToUpdate = 2;
         const updateSave = {
-        current_x_coord: 5,
-        current_y_coord: 5,
-        money_counter: 70,
-        health_points: 80,
-        health_points_max: 100,
-        sanity_points: 75,
-        sanity_points_max: 100,
-        character_skin: 1,
-        dead: true,
-        elapsed_time: 20,
+          current_x_coord: 5,
+          current_y_coord: 5,
+          money_counter: 70,
+          health_points: 80,
+          health_points_max: 100,
+          sanity_points: 75,
+          sanity_points_max: 100,
+          character_skin: 1,
+          dead: true,
+          elapsed_time: 20,
         };
         const expectedSubscription = {
           ...testSaves[idToUpdate - 1],

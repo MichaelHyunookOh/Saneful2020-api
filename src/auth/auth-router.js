@@ -18,7 +18,7 @@ authRouter
     AuthService.getUserWithUserEmail(req.app.get("db"), loginUser.user_email)
       .then((dbUser) => {
         if (!dbUser)
-          return res.status(400).json({
+          return res.status(401).json({
             error: "Incorrect email or password",
           });
         return AuthService.comparePasswords(
@@ -26,22 +26,21 @@ authRouter
           dbUser.user_password
         ).then((compareMatch) => {
           if (!compareMatch)
-            return res.status(400).json({
-              error: "Incorrect user_email or password",
+            return res.status(401).json({
+              error: "Incorrect email or password",
             });
 
           const sub = dbUser.user_email;
           const payload = { user_id: dbUser.user_id, user_name: dbUser.user_name };
-          res.send({
+
+          return res.status(200).send({
             authToken: AuthService.createJwt(sub, payload),
             user_id: payload.user_id,
             user_name: payload.user_name,
           });
-        })
-          .catch(next);
-      });
-  })
-  .catch(next);
-})
+        });
+      })
+      .catch(next);
+  });
 
 module.exports = authRouter;
