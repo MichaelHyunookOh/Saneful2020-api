@@ -9,8 +9,6 @@ describe('Auth Endpoints', () => {
   const { testUsers } = helpers.makeSavesFixtures();
   const testUser = testUsers[0];
 
-  // console.log('testUsers', testUsers);
-  // console.log('testUser', testUser);
 
   before('make knex instance', () => {
     db = knex({

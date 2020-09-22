@@ -112,18 +112,6 @@ describe('User Endpoints', function() {
           .send(userPasswordNotComplex)
           .expect(400, { error: `Password must contain one upper case, lower case, number and special character` })
       })
-
-    //   it(`responds 400 'User name already taken' when user_name isn't unique`, () => {
-    //     const duplicateUser = {
-    //       user_email: 'test user_email',
-    //       user_name: testUser.user_name,
-    //       user_password: '11AAaa!!',
-    //     }
-    //     return supertest(app)
-    //       .post('/api/user')
-    //       .send(duplicateUser)
-    //       .expect(400, { error: `User name already taken` })
-    //   })
     })
 
     context(`Happy path`, () => {
@@ -138,14 +126,7 @@ describe('User Endpoints', function() {
           .send(newUser)
           .expect(201)
           .expect(res => {
-            // expect(res.body).to.have.property('user_id')
-            // expect(res.body.user_email).to.eql(newUser.user_email)
-            // expect(res.body.user_name).to.eql(newUser.user_name)
             expect(res.body).to.not.have.property('user_password')
-            // expect(res.headers.location).to.eql(`/api/user/${res.body.user_id}`)
-            // const expectedDate = new Date().toLocaleString('en', { timeZone: 'UTC' })
-            // const actualDate = new Date(res.body.date_created).toLocaleString()
-            // expect(actualDate).to.eql(expectedDate)
           })
           .expect(res =>
             db
