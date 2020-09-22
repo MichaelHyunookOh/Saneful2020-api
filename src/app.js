@@ -3,26 +3,23 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
-const { NODE_ENV } = require('./config');
 
-const savedGameRouter = require("./saved-games/saved-game-router");
-const authRouter = require("./auth/auth-router");
-const userRouter = require("./user/user-router");
+const { NODE_ENV } = require('./config');
+const savedGameRouter = require('./saved-games/saved-game-router');
+const authRouter = require('./auth/auth-router');
+const userRouter = require('./user/user-router');
 
 const app = express();
 
-const morganOption = (NODE_ENV === 'production')
-  ? 'tiny'
-  : 'common';
+const morganOption = NODE_ENV === 'production' ? 'tiny' : 'common';
 
 app.use(morgan(morganOption));
 app.use(cors());
 app.use(helmet());
 
-app.use("/api/auth", authRouter);
-app.use("/api/user", userRouter);
-app.use("/api/save", savedGameRouter);
-
+app.use('/api/auth', authRouter);
+app.use('/api/user', userRouter);
+app.use('/api/save', savedGameRouter);
 
 app.get('/', (req, res) => {
   // eslint-disable-next-line semi

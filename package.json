@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "seed": "psql -U postgres -d saneful -f ./seeds/seed.saneful_tables.sql",
     "test": "mocha --require test/setup.js",
     "dev": "nodemon src/server.js",
     "migrate": "postgrator --config postgrator-config.js",
@@ -35,7 +36,7 @@
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.2",
     "morgan": "^1.10.0",
-    "pg": "^8.3.0",
+    "pg": "^8.3.3",
     "postgrator": "^4.0.1",
     "postgrator-cli": "^3.2.0",
     "xss": "^1.0.8"

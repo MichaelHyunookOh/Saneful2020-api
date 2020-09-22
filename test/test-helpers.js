@@ -27,7 +27,6 @@ function makeUsersArray() {
   ];
 }
 
-
 function makeSavesArray(users) {
   return [
     {
@@ -77,7 +76,7 @@ function makeSavesArray(users) {
 
 function makeExpectedSave(users, save = []) {
   const user = users
-    .find(user => user.user_id === save.user_id);
+    .find((user) => user.user_id === save.user_id);
 
   return {
     saved_game_id: save.saved_game_id,
@@ -95,7 +94,7 @@ function makeExpectedSave(users, save = []) {
       user_id: user.user_id,
       user_name: user.user_name,
       user_email: user.user_email,
-      date_created: user.date_created
+      date_created: user.date_created,
     },
   };
 }
@@ -116,26 +115,22 @@ function cleanTables(db) {
 }
 
 function seedUsers(db, users) {
-  const preppedUsers = users.map(user => ({
+  const preppedUsers = users.map((user) => ({
     ...user,
-    user_password: bcrypt.hashSync(user.user_password, 1)
+    user_password: bcrypt.hashSync(user.user_password, 1),
   }));
-  return db.transaction(async trx => {
+  return db.transaction(async (trx) => {
     await trx('saneful_user').insert(preppedUsers);
-    await trx.raw(
-      `SELECT setval('saneful_user_user_id_seq', ?)`,
-      [users[users.length - 1].user_id]
-    );
+    await trx.raw(`SELECT setval('saneful_user_user_id_seq', ?)`, [
+      users[users.length - 1].user_id,
+    ]);
   });
 }
 
 function seedSavesTables(db, users, saves = []) {
-  return seedUsers(db, users)
-    .then(() =>
-      db
-        .into('saneful_saved_game')
-        .insert(saves)
-    );
+  return seedUsers(db, users).then(() =>
+    db.into('saneful_saved_game').insert(saves)
+  );
 }
 
 function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
@@ -161,4 +156,3 @@ module.exports = {
   makeSavesFixtures,
   makeExpectedSave,
 };
-
