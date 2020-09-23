@@ -1,6 +1,6 @@
 # Saneful 2020
 
-### Project by Nick S., Chrissy H., Michael O., Minh N. and Matt R..
+### Project by Nick T., Chrissy H., Michael O., Minh N. and Matt R..
 
 Live Link:
 https://saneful.vercel.app/
