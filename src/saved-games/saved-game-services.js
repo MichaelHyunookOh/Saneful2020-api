@@ -98,7 +98,7 @@ const SavedGameService = {
     getLeaderboard(db) {
         return db
         .from('saneful_saved_game')
-        .select('user_name', 'elapsed_time', 'dead')
+        .distinct('user_name', 'elapsed_time', 'dead')
         .innerJoin(db.raw('(select user_id, MAX(elapsed_time) as MaxTime from saneful_saved_game group by user_id) as groupedssg on saneful_saved_game.user_id = groupedssg.user_id and saneful_saved_game.elapsed_time = groupedssg.MaxTime'))
         .leftJoin('saneful_user', 'saneful_saved_game.user_id', 'saneful_user.user_id')
         .orderBy('elapsed_time', 'desc')
